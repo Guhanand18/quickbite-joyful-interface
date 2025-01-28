@@ -1,21 +1,21 @@
-import { ShoppingCart, Clock3, Utensils } from "lucide-react";
+import { QrCode, MapPin, ShoppingBag } from "lucide-react";
 
 const HowItWorks = () => {
   const steps = [
     {
-      icon: <ShoppingCart className="w-12 h-12 text-primary" />,
+      icon: <MapPin className="w-12 h-12 text-primary" />,
+      title: "Find Nearest Kiosk",
+      description: "Locate our convenient kiosk stations along your route",
+    },
+    {
+      icon: <ShoppingBag className="w-12 h-12 text-primary" />,
       title: "Place Your Order",
-      description: "Choose your favorite meals from our menu",
+      description: "Order and pay at the kiosk to receive your QR code",
     },
     {
-      icon: <Clock3 className="w-12 h-12 text-primary" />,
-      title: "Wait 15 Minutes",
-      description: "We prepare your order fresh and fast",
-    },
-    {
-      icon: <Utensils className="w-12 h-12 text-primary" />,
-      title: "Pick Up & Enjoy",
-      description: "Collect your order from our nearest location",
+      icon: <QrCode className="w-12 h-12 text-primary" />,
+      title: "Scan & Collect",
+      description: "Show your QR code at the kiosk to collect your fresh meal",
     },
   ];
 
