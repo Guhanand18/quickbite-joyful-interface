@@ -18,6 +18,24 @@ const PopularMeals = () => {
       price: "$14.99",
       image: "https://images.unsplash.com/photo-1501286353178-1ec881214838",
     },
+    {
+      name: "Superfood Salad",
+      description: "Spinach, avocado, quinoa, and chia seeds",
+      price: "$11.99",
+      image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9",
+    },
+    {
+      name: "Vegan Buddha Bowl",
+      description: "Roasted chickpeas, brown rice, and seasonal vegetables",
+      price: "$13.99",
+      image: "https://images.unsplash.com/photo-1501286353178-1ec881214838",
+    },
+    {
+      name: "Poke Bowl",
+      description: "Fresh tuna, brown rice, edamame, and ponzu sauce",
+      price: "$15.99",
+      image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9",
+    },
   ];
 
   return (
@@ -26,7 +44,7 @@ const PopularMeals = () => {
         <h2 className="font-playfair font-bold text-3xl md:text-4xl text-center mb-12">
           Popular Meals
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {meals.map((meal, index) => (
             <div
               key={index}
