@@ -9,13 +9,13 @@ const HowItWorks = () => {
     },
     {
       icon: <ShoppingBag className="w-12 h-12 text-primary" />,
-      title: "Place Your Order",
-      description: "Order and pay at the kiosk to receive your QR code",
+      title: "Order & Pay Online",
+      description: "Place your order and pay while traveling to receive your QR code",
     },
     {
       icon: <QrCode className="w-12 h-12 text-primary" />,
       title: "Scan & Collect",
-      description: "Show your QR code at the kiosk to collect your fresh meal",
+      description: "Upon arrival, scan your QR code at the kiosk to collect your fresh meal",
     },
   ];
 
