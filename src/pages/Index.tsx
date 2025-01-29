@@ -1,7 +1,6 @@
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import Features from "../components/Features";
-import PopularMeals from "../components/PopularMeals";
 import HowItWorks from "../components/HowItWorks";
 import Footer from "../components/Footer";
 
@@ -11,7 +10,6 @@ const Index = () => {
       <Navbar />
       <Hero />
       <Features />
-      <PopularMeals />
       <HowItWorks />
       <Footer />
     </div>
