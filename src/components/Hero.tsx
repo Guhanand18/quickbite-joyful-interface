@@ -1,6 +1,9 @@
 import { ArrowRight, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="pt-16 bg-neutral dark:bg-gray-900">
       <div className="container mx-auto px-4 py-20">
@@ -20,7 +23,10 @@ const Hero = () => {
             <p className="font-montserrat text-gray-600 dark:text-gray-300 text-lg mb-8">
               Delicious meals made with fresh ingredients, ready for pickup at your convenience.
             </p>
-            <button className="bg-accent hover:bg-accent/90 text-white font-montserrat font-semibold px-8 py-3 rounded-md transition-all hover:scale-105 flex items-center gap-2 group">
+            <button 
+              onClick={() => navigate("/order")}
+              className="bg-accent hover:bg-accent/90 text-white font-montserrat font-semibold px-8 py-3 rounded-md transition-all hover:scale-105 flex items-center gap-2 group"
+            >
               Order Now
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>

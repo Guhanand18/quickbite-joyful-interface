@@ -1,7 +1,7 @@
 import { Button } from "./ui/button";
 import DarkModeToggle from "./DarkModeToggle";
 import { useState } from "react";
-import { UserRound, LogIn } from "lucide-react";
+import { LogIn } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
@@ -10,10 +10,6 @@ const Navbar = () => {
 
   const handleSignInClick = () => {
     navigate("/signin");
-  };
-
-  const handleOrderClick = () => {
-    navigate("/order");
   };
 
   return (
@@ -38,9 +34,6 @@ const Navbar = () => {
               </Button>
               <Button variant="ghost" className="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">
                 Contact
-              </Button>
-              <Button variant="default" className="bg-primary hover:bg-primary/90" onClick={handleOrderClick}>
-                Order Now
               </Button>
               {isSignedIn ? (
                 <Button variant="ghost" className="flex items-center gap-2">

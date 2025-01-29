@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Star } from "lucide-react";
+import { Search, Star, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface MenuItem {
   id: number;
@@ -39,6 +40,7 @@ const menuItems: MenuItem[] = [
 ];
 
 const Order = () => {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
@@ -61,6 +63,15 @@ const Order = () => {
   return (
     <div className="min-h-screen bg-neutral dark:bg-gray-900">
       <div className="container mx-auto px-4 py-8">
+        <Button
+          variant="ghost"
+          className="mb-6 flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+          onClick={() => navigate(-1)}
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back
+        </Button>
+
         <h1 className="font-playfair text-4xl font-bold text-center mb-8 dark:text-white">
           Our Menu
         </h1>
