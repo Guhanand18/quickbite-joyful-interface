@@ -20,17 +20,21 @@ const Features = () => {
   ];
 
   return (
-    <div className="py-20 bg-white">
+    <div className="py-20 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <div
               key={index}
-              className="p-6 rounded-lg bg-neutral hover:shadow-md transition-shadow duration-300"
+              className="p-6 rounded-lg bg-neutral dark:bg-gray-800 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             >
               <div className="mb-4">{feature.icon}</div>
-              <h3 className="font-playfair font-semibold text-xl mb-2">{feature.title}</h3>
-              <p className="font-montserrat text-gray-600">{feature.description}</p>
+              <h3 className="font-playfair font-semibold text-xl mb-2 text-gray-900 dark:text-white">
+                {feature.title}
+              </h3>
+              <p className="font-montserrat text-gray-600 dark:text-gray-300">
+                {feature.description}
+              </p>
             </div>
           ))}
         </div>
