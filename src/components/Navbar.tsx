@@ -2,12 +2,18 @@ import { Button } from "./ui/button";
 import DarkModeToggle from "./DarkModeToggle";
 import { useState } from "react";
 import { UserRound, LogIn } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignInClick = () => {
-    setIsSignedIn(true);
+    navigate("/signin");
+  };
+
+  const handleOrderClick = () => {
+    navigate("/order");
   };
 
   return (
@@ -33,7 +39,7 @@ const Navbar = () => {
               <Button variant="ghost" className="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">
                 Contact
               </Button>
-              <Button variant="default" className="bg-primary hover:bg-primary/90">
+              <Button variant="default" className="bg-primary hover:bg-primary/90" onClick={handleOrderClick}>
                 Order Now
               </Button>
               {isSignedIn ? (

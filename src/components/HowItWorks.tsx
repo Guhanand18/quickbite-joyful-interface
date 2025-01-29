@@ -20,17 +20,17 @@ const HowItWorks = () => {
   ];
 
   return (
-    <div id="how-it-works" className="py-20 bg-white">
+    <div id="how-it-works" className="py-20 bg-neutral dark:bg-gray-900">
       <div className="container mx-auto px-4">
-        <h2 className="font-playfair font-bold text-3xl md:text-4xl text-center mb-12">
+        <h2 className="font-playfair font-bold text-3xl md:text-4xl text-center mb-12 dark:text-white">
           How It Works
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {steps.map((step, index) => (
             <div key={index} className="text-center">
               <div className="mb-6 flex justify-center">{step.icon}</div>
-              <h3 className="font-playfair font-semibold text-xl mb-2">{step.title}</h3>
-              <p className="font-montserrat text-gray-600">{step.description}</p>
+              <h3 className="font-playfair font-semibold text-xl mb-2 dark:text-white">{step.title}</h3>
+              <p className="font-montserrat text-gray-600 dark:text-gray-300">{step.description}</p>
             </div>
           ))}
         </div>
