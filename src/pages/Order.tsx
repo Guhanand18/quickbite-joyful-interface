@@ -20,7 +20,7 @@ const menuItems: MenuItem[] = [
     id: 1,
     name: "Avocado Toast",
     description: "Fresh avocado on sourdough bread with poached eggs",
-    price: 12.99,
+    price: 599,
     category: "Breakfast",
     image: "https://images.unsplash.com/photo-1588137378633-dea1336ce1e2",
     dietary: ["Vegetarian"],
@@ -30,7 +30,7 @@ const menuItems: MenuItem[] = [
     id: 2,
     name: "Quinoa Bowl",
     description: "Mixed quinoa with roasted vegetables and tahini dressing",
-    price: 14.99,
+    price: 699,
     category: "Lunch",
     image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd",
     dietary: ["Vegan", "Gluten-Free"],
@@ -157,7 +157,7 @@ const Order = () => {
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="font-montserrat font-bold text-lg dark:text-white">
-                    ${item.price}
+                    ₹{item.price}
                   </span>
                   <Button className="bg-primary hover:bg-primary/90">
                     Add to Cart
