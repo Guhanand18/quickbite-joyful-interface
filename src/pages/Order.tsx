@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Star, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "@/components/Navbar";
 
 interface MenuItem {
   id: number;
@@ -62,6 +63,7 @@ const Order = () => {
 
   return (
     <div className="min-h-screen bg-neutral dark:bg-gray-900">
+      <Navbar />
       <div className="container mx-auto px-4 py-8">
         <Button
           variant="ghost"
