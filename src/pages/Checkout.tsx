@@ -3,14 +3,48 @@ import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import { QrCode } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
+
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
 
 const Checkout = () => {
   const navigate = useNavigate();
   const [showQR, setShowQR] = React.useState(false);
+  const { toast } = useToast();
 
   const handlePayment = () => {
-    // In a real app, handle payment processing here
-    setShowQR(true);
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      amount: 50000, // Amount in paise (₹500)
+      currency: "INR",
+      name: "QuickBite",
+      description: "Food Order Payment",
+      handler: function (response: any) {
+        console.log(response);
+        if (response.razorpay_payment_id) {
+          setShowQR(true);
+          toast({
+            title: "Payment Successful",
+            description: "Your order has been confirmed!",
+          });
+        }
+      },
+      prefill: {
+        name: "Customer Name",
+        email: "customer@example.com",
+        contact: "9999999999"
+      },
+      theme: {
+        color: "#28a745"
+      }
+    };
+
+    const razorpayInstance = new window.Razorpay(options);
+    razorpayInstance.open();
   };
 
   return (
@@ -25,14 +59,11 @@ const Checkout = () => {
               <h2 className="text-xl font-semibold mb-6 dark:text-white">Payment Options</h2>
               
               <div className="space-y-4">
-                <div className="border rounded-lg p-4 cursor-pointer hover:border-primary">
-                  <h3 className="font-semibold dark:text-white">UPI Payment</h3>
-                  <div className="grid grid-cols-4 gap-4 mt-4">
-                    <img src="/gpay.png" alt="Google Pay" className="h-12 object-contain" />
-                    <img src="/phonepe.png" alt="PhonePe" className="h-12 object-contain" />
-                    <img src="/paytm.png" alt="Paytm" className="h-12 object-contain" />
-                    <img src="/bhim.png" alt="BHIM" className="h-12 object-contain" />
-                  </div>
+                <div className="border rounded-lg p-4">
+                  <h3 className="font-semibold dark:text-white">Secure Payment with Razorpay</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                    Pay securely using UPI, Credit/Debit cards, or Net Banking
+                  </p>
                 </div>
                 
                 <Button 
