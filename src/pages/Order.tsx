@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Star, ArrowLeft } from "lucide-react";
+import { Search, Star, ArrowLeft, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 
 interface MenuItem {
   id: number;
@@ -14,6 +15,11 @@ interface MenuItem {
   image: string;
   dietary: string[];
   popular: boolean;
+  customization?: {
+    spiceLevel?: string[];
+    addOns?: { name: string; price: number }[];
+    specialInstructions?: boolean;
+  };
 }
 
 const menuItems: MenuItem[] = [
@@ -26,6 +32,14 @@ const menuItems: MenuItem[] = [
     image: "https://images.unsplash.com/photo-1588137378633-dea1336ce1e2",
     dietary: ["Vegetarian"],
     popular: true,
+    customization: {
+      spiceLevel: ["Mild", "Medium", "Spicy"],
+      addOns: [
+        { name: "Extra Egg", price: 50 },
+        { name: "Extra Avocado", price: 80 }
+      ],
+      specialInstructions: true
+    }
   },
   {
     id: 2,
@@ -37,7 +51,6 @@ const menuItems: MenuItem[] = [
     dietary: ["Vegan", "Gluten-Free"],
     popular: false,
   },
-  // Add more menu items as needed
 ];
 
 const Order = () => {
@@ -45,6 +58,8 @@ const Order = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
+  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  const [isCustomizing, setIsCustomizing] = useState(false);
 
   const categories = ["All", "Breakfast", "Lunch", "Dinner", "Snacks"];
   const dietaryOptions = ["Vegetarian", "Vegan", "Gluten-Free"];
@@ -60,6 +75,11 @@ const Order = () => {
       selectedDietary.some((diet) => item.dietary.includes(diet));
     return matchesCategory && matchesSearch && matchesDietary;
   });
+
+  const handleItemClick = (item: MenuItem) => {
+    setSelectedItem(item);
+    setIsCustomizing(true);
+  };
 
   return (
     <div className="min-h-screen bg-neutral dark:bg-gray-900">
@@ -126,7 +146,8 @@ const Order = () => {
           {filteredItems.map((item) => (
             <div
               key={item.id}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
+              onClick={() => handleItemClick(item)}
             >
               <img
                 src={item.image}
@@ -169,6 +190,77 @@ const Order = () => {
             </div>
           ))}
         </div>
+
+        <Sheet open={isCustomizing} onOpenChange={setIsCustomizing}>
+          <SheetContent side="right" className="w-full sm:w-[540px]">
+            <SheetHeader>
+              <SheetTitle>{selectedItem?.name}</SheetTitle>
+              <SheetDescription>{selectedItem?.description}</SheetDescription>
+            </SheetHeader>
+            
+            {selectedItem?.customization && (
+              <div className="mt-6 space-y-6">
+                {selectedItem.customization.spiceLevel && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3 dark:text-white">Spice Level</h3>
+                    <div className="flex gap-2">
+                      {selectedItem.customization.spiceLevel.map((level) => (
+                        <Button
+                          key={level}
+                          variant="outline"
+                          className="flex-1"
+                        >
+                          {level}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {selectedItem.customization.addOns && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3 dark:text-white">Add-ons</h3>
+                    <div className="space-y-2">
+                      {selectedItem.customization.addOns.map((addon) => (
+                        <div
+                          key={addon.name}
+                          className="flex items-center justify-between p-3 border rounded-lg"
+                        >
+                          <span className="dark:text-white">{addon.name}</span>
+                          <Button variant="outline">
+                            + ₹{addon.price}
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {selectedItem.customization.specialInstructions && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3 dark:text-white">Special Instructions</h3>
+                    <Input
+                      placeholder="Any special requests?"
+                      className="w-full"
+                    />
+                  </div>
+                )}
+
+                <div className="absolute bottom-0 left-0 right-0 p-6 bg-background border-t">
+                  <Button
+                    className="w-full"
+                    onClick={() => {
+                      setIsCustomizing(false);
+                      navigate('/checkout');
+                    }}
+                  >
+                    Proceed to Checkout
+                  </Button>
+                </div>
+              </div>
+            )}
+          </SheetContent>
+        </Sheet>
       </div>
     </div>
   );

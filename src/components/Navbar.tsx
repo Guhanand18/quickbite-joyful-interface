@@ -17,22 +17,19 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
-            <span className="font-playfair text-2xl font-bold text-primary hover:text-primary/90 transition-colors dark:text-white">
+            <span className="font-playfair text-2xl font-bold text-primary hover:text-primary/90 transition-colors dark:text-white cursor-pointer" onClick={() => navigate("/")}>
               QuickBite
             </span>
           </div>
           <div className="hidden md:block">
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" className="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">
+              <Button variant="ghost" className="text-gray-700 dark:text-gray-200 hover:bg-primary/10 hover:text-primary dark:hover:bg-gray-800" onClick={() => navigate("/")}>
                 Home
               </Button>
-              <Button variant="ghost" className="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">
-                Menu
-              </Button>
-              <Button variant="ghost" className="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">
+              <Button variant="ghost" className="text-gray-700 dark:text-gray-200 hover:bg-primary/10 hover:text-primary dark:hover:bg-gray-800" onClick={() => navigate("/locations")}>
                 Locations
               </Button>
-              <Button variant="ghost" className="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">
+              <Button variant="ghost" className="text-gray-700 dark:text-gray-200 hover:bg-primary/10 hover:text-primary dark:hover:bg-gray-800">
                 Contact
               </Button>
               {isSignedIn ? (
