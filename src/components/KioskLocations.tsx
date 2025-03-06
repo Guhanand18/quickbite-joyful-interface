@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { MapPin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -59,7 +60,7 @@ const KioskLocations = () => {
         </h2>
         
         <div className="mb-12">
-          <LoadScript googleMapsApiKey="YOUR_API_KEY">
+          <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""}>
             <GoogleMap
               mapContainerStyle={containerStyle}
               center={center}

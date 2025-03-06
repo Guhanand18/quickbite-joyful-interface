@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
@@ -61,7 +62,7 @@ const Locations = () => {
         </h1>
         
         <div className="mb-12 rounded-lg overflow-hidden shadow-lg">
-          <LoadScript googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY}>
+          <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""}>
             <GoogleMap
               mapContainerStyle={containerStyle}
               center={center}
