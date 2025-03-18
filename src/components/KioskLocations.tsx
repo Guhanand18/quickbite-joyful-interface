@@ -10,28 +10,32 @@ const locations = [
     city: "Mumbai",
     address: "Shop 4, Chhatrapati Shivaji Terminus, Mumbai - 400050",
     coordinates: [72.8347, 19.0544],
-    type: "Railway Station"
+    type: "Railway Station",
+    specialties: ["Street Food", "Breakfast Bowls", "Local Favorites"]
   },
   {
     id: 2,
     city: "Delhi",
     address: "Terminal 3, Indira Gandhi International Airport, New Delhi - 110001",
     coordinates: [77.2090, 28.6139],
-    type: "Airport"
+    type: "Airport",
+    specialties: ["Protein Bowls", "Travel Snacks", "Global Cuisine"]
   },
   {
     id: 3,
     city: "Bangalore",
     address: "Majestic Bus Station, Bangalore - 560038",
     coordinates: [77.6406, 12.9716],
-    type: "Bus Station"
+    type: "Bus Station",
+    specialties: ["South Indian", "Healthy Wraps", "Fresh Juices"]
   },
   {
     id: 4,
     city: "Hyderabad",
     address: "Secunderabad Railway Station, Hyderabad - 500033",
     coordinates: [78.4867, 17.4123],
-    type: "Railway Station"
+    type: "Railway Station",
+    specialties: ["Hyderabadi Specials", "Breakfast Options", "Diet Meals"]
   }
 ];
 
@@ -108,9 +112,18 @@ const KioskLocations = () => {
               <p className="font-montserrat text-gray-600 dark:text-gray-300 mb-2">
                 {location.address}
               </p>
-              <span className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
+              <span className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-sm mb-3">
                 {location.type}
               </span>
+              
+              <div className="mt-4">
+                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Specialties:</h4>
+                <ul className="text-sm text-gray-600 dark:text-gray-400">
+                  {location.specialties.map((specialty, idx) => (
+                    <li key={idx} className="mb-1">• {specialty}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
           ))}
         </div>

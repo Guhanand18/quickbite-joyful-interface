@@ -1,3 +1,4 @@
+
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -33,8 +34,8 @@ const Hero = () => {
           </div>
           <div className="md:w-1/2 transform hover:scale-105 transition-transform duration-300">
             <img
-              src="https://images.unsplash.com/photo-1618160702438-9b02ab6515c9"
-              alt="Healthy meal"
+              src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd"
+              alt="Healthy food bowl"
               className="rounded-lg shadow-lg w-full h-[400px] object-cover hover:shadow-xl transition-shadow"
             />
           </div>
