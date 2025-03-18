@@ -41,13 +41,12 @@ interface CartItem extends MenuItem {
   totalItemPrice: number;
 }
 
-// Updated menu items with more dishes and reduced prices
 const allMenuItems: MenuItem[] = [
   {
     id: 1,
     name: "Avocado Toast",
     description: "Fresh avocado on sourdough bread with poached eggs",
-    price: 399, // Reduced from 599
+    price: 399,
     category: "Breakfast",
     image: "https://images.unsplash.com/photo-1588137378633-dea1336ce1e2",
     dietary: ["Vegetarian"],
@@ -76,7 +75,7 @@ const allMenuItems: MenuItem[] = [
     id: 2,
     name: "Quinoa Bowl",
     description: "Mixed quinoa with roasted vegetables and tahini dressing",
-    price: 499, // Reduced from 699
+    price: 499,
     category: "Lunch",
     image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd",
     dietary: ["Vegan", "Gluten-Free"],
@@ -223,20 +222,18 @@ const allMenuItems: MenuItem[] = [
   }
 ];
 
-// Recent orders data
 const recentOrders = [
   { id: 3, timestamp: new Date().getTime() - 24 * 60 * 60 * 1000 },
   { id: 5, timestamp: new Date().getTime() - 3 * 24 * 60 * 60 * 1000 }
 ];
 
-// Special combo deals
 const combos = [
   {
     id: 101,
     name: "Breakfast Bundle",
     description: "Avocado Toast + Fruit & Yogurt Parfait",
     items: [1, 7],
-    price: 599, // Discounted price
+    price: 599,
     image: "https://images.unsplash.com/photo-1588137378633-dea1336ce1e2",
     servingSize: "Serves 1-2 people"
   },
@@ -245,7 +242,7 @@ const combos = [
     name: "Lunch Power Duo",
     description: "Quinoa Bowl + Smoothie Bowl",
     items: [2, 4],
-    price: 699, // Discounted price
+    price: 699,
     image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd",
     servingSize: "Serves 2 people"
   }
@@ -320,7 +317,6 @@ const Order = () => {
   const handleAddToCart = () => {
     if (!selectedItem) return;
     
-    // Calculate base price based on size selection
     let basePrice = selectedItem.price;
     if (selectedItem.customization?.size && currentOptions.size) {
       const selectedSize = selectedItem.customization.size.find(s => s.name === currentOptions.size);
@@ -329,7 +325,6 @@ const Order = () => {
       }
     }
     
-    // Calculate add-ons price
     let addOnsPrice = 0;
     if (currentOptions.addOns && currentOptions.addOns.length > 0 && selectedItem.customization?.addOns) {
       addOnsPrice = currentOptions.addOns.reduce((total, addon) => {
@@ -338,7 +333,6 @@ const Order = () => {
       }, 0);
     }
     
-    // Calculate extras price
     let extrasPrice = 0;
     if (currentOptions.extras && currentOptions.extras.length > 0 && selectedItem.customization?.extras) {
       extrasPrice = currentOptions.extras.reduce((total, extra) => {
@@ -347,10 +341,8 @@ const Order = () => {
       }, 0);
     }
     
-    // Calculate total for this item
     const totalItemPrice = (basePrice + addOnsPrice + extrasPrice) * quantity;
     
-    // Create cart item
     const cartItem: CartItem = {
       ...selectedItem,
       quantity,
@@ -362,9 +354,8 @@ const Order = () => {
     setIsCustomizing(false);
   };
 
-  // Add a new function to directly add items to cart without customization
   const handleQuickAddToCart = (e: React.MouseEvent, item: MenuItem) => {
-    e.stopPropagation(); // Prevent the card click event from firing
+    e.stopPropagation();
     
     const cartItem: CartItem = {
       ...item,
@@ -377,7 +368,6 @@ const Order = () => {
   };
 
   const handleCheckout = () => {
-    // Pass cart information to checkout page
     navigate('/checkout', { state: { cart } });
   };
 
@@ -496,7 +486,6 @@ const Order = () => {
                       key={combo.id}
                       className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
                       onClick={() => {
-                        // Add combo items to cart directly
                         const comboItems = combo.items.map(id => menuItems.find(item => item.id === id))
                           .filter(Boolean) as MenuItem[];
                         
@@ -835,4 +824,50 @@ const Order = () => {
 
                 {selectedItem.customization.specialInstructions && (
                   <div>
-                    <h3 className="text-lg font-
+                    <h3 className="text-lg font-semibold mb-3 dark:text-white">Special Instructions</h3>
+                    <Input
+                      placeholder="E.g., No onions, extra crispy, etc."
+                      value={currentOptions.specialInstructions || ""}
+                      onChange={(e) => setCurrentOptions(prev => ({...prev, specialInstructions: e.target.value}))}
+                      className="dark:bg-gray-800 dark:text-white"
+                    />
+                  </div>
+                )}
+
+                <div className="fixed bottom-0 left-0 right-0 bg-background border-t p-4 sm:absolute">
+                  <Button 
+                    className="w-full h-12 text-lg"
+                    onClick={handleAddToCart}
+                  >
+                    Add to Cart
+                  </Button>
+                </div>
+              </div>
+            )}
+          </SheetContent>
+        </Sheet>
+
+        {cart.length > 0 && (
+          <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t shadow-lg p-4 z-10">
+            <div className="container mx-auto flex justify-between items-center">
+              <div>
+                <span className="text-gray-600 dark:text-gray-300">{cart.reduce((total, item) => total + item.quantity, 0)} items</span>
+                <p className="font-bold text-lg dark:text-white">₹{getTotalPrice()}</p>
+              </div>
+              <Button 
+                className="flex items-center gap-2"
+                onClick={handleCheckout}
+              >
+                Proceed to Checkout
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Order;
+
