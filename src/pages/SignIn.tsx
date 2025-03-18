@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { useToast } from "@/components/ui/use-toast";
 
 const dietaryPreferences = [
   { id: "vegetarian", label: "Vegetarian" },
@@ -30,15 +31,48 @@ const cuisinePreferences = [
 
 const SignIn = () => {
   const [isSignUp, setIsSignUp] = useState(false);
+  const [showPreferences, setShowPreferences] = useState(false);
   const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
   const [cuisine, setCuisine] = useState<string>("All");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // In a real app, store preferences in local storage or user profile
     localStorage.setItem("dietaryPreferences", JSON.stringify(selectedDietary));
     localStorage.setItem("cuisinePreference", cuisine);
+    localStorage.setItem("userEmail", email);
+    
+    toast({
+      title: isSignUp ? "Account created!" : "Welcome back!",
+      description: "You have successfully signed in.",
+    });
+    
+    navigate("/");
+  };
+
+  const handleSocialLogin = (provider: string) => {
+    // Simulate social login and show preferences
+    setShowPreferences(true);
+    toast({
+      title: `${provider} authentication successful`,
+      description: "Please complete your food preferences.",
+    });
+  };
+
+  const savePreferences = () => {
+    localStorage.setItem("dietaryPreferences", JSON.stringify(selectedDietary));
+    localStorage.setItem("cuisinePreference", cuisine);
+    localStorage.setItem("userEmail", "social-login@example.com");
+    
+    toast({
+      title: "Preferences saved",
+      description: "Your food preferences have been saved.",
+    });
+    
     navigate("/");
   };
 
@@ -49,6 +83,66 @@ const SignIn = () => {
         : [...current, id]
     );
   };
+
+  // If showing only preferences after social login
+  if (showPreferences) {
+    return (
+      <div className="min-h-screen bg-neutral dark:bg-gray-900 py-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+            <h2 className="font-playfair text-3xl font-bold text-center mb-8 dark:text-white">
+              Your Food Preferences
+            </h2>
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-medium dark:text-white mb-2">Dietary Preferences</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                  Select all that apply. We'll customize your menu based on these preferences.
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                  {dietaryPreferences.map((preference) => (
+                    <div key={preference.id} className="flex items-center space-x-2">
+                      <Checkbox 
+                        id={preference.id} 
+                        checked={selectedDietary.includes(preference.id)}
+                        onCheckedChange={() => toggleDietaryPreference(preference.id)}
+                      />
+                      <Label 
+                        htmlFor={preference.id}
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:text-white"
+                      >
+                        {preference.label}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-medium dark:text-white mb-2">Preferred Cuisine</h3>
+                <Select value={cuisine} onValueChange={setCuisine}>
+                  <SelectTrigger className="w-full bg-white dark:bg-gray-700 dark:text-white border border-gray-300 dark:border-gray-600">
+                    <SelectValue placeholder="Select cuisine" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700">
+                    {cuisinePreferences.map((cuisineOption) => (
+                      <SelectItem key={cuisineOption} value={cuisineOption}>
+                        {cuisineOption}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Button className="w-full bg-primary hover:bg-primary/90" onClick={savePreferences}>
+                Save Preferences
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-neutral dark:bg-gray-900 py-20">
@@ -69,6 +163,8 @@ const SignIn = () => {
               type="email"
               placeholder="Email"
               className="w-full dark:bg-gray-700 dark:text-white"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             {isSignUp && (
               <Input
@@ -81,6 +177,8 @@ const SignIn = () => {
               type="password"
               placeholder="Password"
               className="w-full dark:bg-gray-700 dark:text-white"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
 
             {isSignUp && (
@@ -112,10 +210,10 @@ const SignIn = () => {
                 <div>
                   <h3 className="text-lg font-medium dark:text-white mb-2">Preferred Cuisine</h3>
                   <Select value={cuisine} onValueChange={setCuisine}>
-                    <SelectTrigger className="w-full dark:bg-gray-700 dark:text-white">
+                    <SelectTrigger className="w-full bg-white dark:bg-gray-700 dark:text-white border border-gray-300 dark:border-gray-600">
                       <SelectValue placeholder="Select cuisine" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700">
                       {cuisinePreferences.map((cuisineOption) => (
                         <SelectItem key={cuisineOption} value={cuisineOption}>
                           {cuisineOption}
@@ -148,6 +246,7 @@ const SignIn = () => {
               <Button
                 variant="outline"
                 className="w-full dark:text-white dark:hover:bg-gray-700"
+                onClick={() => handleSocialLogin("Google")}
               >
                 <FaGoogle className="mr-2" />
                 Google
@@ -155,6 +254,7 @@ const SignIn = () => {
               <Button
                 variant="outline"
                 className="w-full dark:text-white dark:hover:bg-gray-700"
+                onClick={() => handleSocialLogin("Apple")}
               >
                 <FaApple className="mr-2" />
                 Apple
