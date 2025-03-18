@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +21,7 @@ interface MenuItem {
   popular: boolean;
   servingSize: string;
   locationIds?: number[];
+  locationPricing?: Record<number, number>;
   customization?: {
     spiceLevel?: string[];
     addOns?: { name: string; price: number }[];
@@ -53,6 +55,10 @@ const allMenuItems: MenuItem[] = [
     popular: true,
     servingSize: "Serves 1 person",
     locationIds: [1, 3],
+    locationPricing: {
+      1: 399, // Mumbai
+      3: 429  // Bangalore
+    },
     customization: {
       spiceLevel: ["Mild", "Medium", "Spicy"],
       addOns: [
@@ -82,6 +88,11 @@ const allMenuItems: MenuItem[] = [
     popular: false,
     servingSize: "Serves 1-2 people",
     locationIds: [1, 2, 4],
+    locationPricing: {
+      1: 499, // Mumbai
+      2: 529, // Delhi
+      4: 479  // Hyderabad
+    },
     customization: {
       addOns: [
         { name: "Grilled Tofu", price: 50 },
@@ -101,6 +112,10 @@ const allMenuItems: MenuItem[] = [
     popular: true,
     servingSize: "Serves 1 person",
     locationIds: [1, 3],
+    locationPricing: {
+      1: 349, // Mumbai
+      3: 369  // Bangalore
+    },
     customization: {
       spiceLevel: ["Mild", "Medium", "Spicy", "Extra Spicy"],
       addOns: [
@@ -126,6 +141,10 @@ const allMenuItems: MenuItem[] = [
     popular: false,
     servingSize: "Serves 1 person",
     locationIds: [2, 4],
+    locationPricing: {
+      2: 299, // Delhi
+      4: 289  // Hyderabad
+    },
     customization: {
       addOns: [
         { name: "Extra Granola", price: 30 },
@@ -144,6 +163,11 @@ const allMenuItems: MenuItem[] = [
     popular: true,
     servingSize: "Serves 1 person",
     locationIds: [1, 3, 4],
+    locationPricing: {
+      1: 199, // Mumbai
+      3: 179, // Bangalore
+      4: 189  // Hyderabad
+    },
     customization: {
       spiceLevel: ["Mild", "Medium", "Spicy"],
       size: [
@@ -169,6 +193,10 @@ const allMenuItems: MenuItem[] = [
     popular: false,
     servingSize: "Serves 1-2 people",
     locationIds: [2, 4],
+    locationPricing: {
+      2: 449, // Delhi
+      4: 429  // Hyderabad
+    },
     customization: {
       addOns: [
         { name: "Grilled Chicken", price: 80 },
@@ -193,6 +221,12 @@ const allMenuItems: MenuItem[] = [
     popular: false,
     servingSize: "Serves 1 person",
     locationIds: [1, 2, 3, 4],
+    locationPricing: {
+      1: 249, // Mumbai
+      2: 269, // Delhi
+      3: 239, // Bangalore
+      4: 249  // Hyderabad
+    },
     customization: {
       addOns: [
         { name: "Chia Seeds", price: 20 },
@@ -211,6 +245,10 @@ const allMenuItems: MenuItem[] = [
     popular: true,
     servingSize: "Serves 1-2 people",
     locationIds: [2, 3],
+    locationPricing: {
+      2: 599, // Delhi
+      3: 579  // Bangalore
+    },
     customization: {
       spiceLevel: ["Mild", "Medium", "Spicy"],
       addOns: [
@@ -218,6 +256,95 @@ const allMenuItems: MenuItem[] = [
         { name: "Sweet Potato", price: 40 }
       ],
       specialInstructions: true
+    }
+  },
+  // Mumbai Special
+  {
+    id: 9,
+    name: "Vada Pav",
+    description: "Mumbai's favorite street food - spicy potato fritter in a soft bun with chutneys",
+    price: 89,
+    category: "Street Food",
+    image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84",
+    dietary: ["Vegetarian"],
+    popular: true,
+    servingSize: "Serves 1 person",
+    locationIds: [1],
+    locationPricing: {
+      1: 89 // Mumbai
+    },
+    customization: {
+      spiceLevel: ["Mild", "Medium", "Spicy"],
+      extras: [
+        { name: "Extra Chutney", price: 10 },
+        { name: "Fried Chili", price: 15 }
+      ]
+    }
+  },
+  // Delhi Special
+  {
+    id: 10,
+    name: "Butter Chicken Bowl",
+    description: "Tender chicken in a rich tomato and butter gravy with rice",
+    price: 349,
+    category: "Dinner",
+    image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398",
+    dietary: ["High-Protein"],
+    popular: true,
+    servingSize: "Serves 1 person",
+    locationIds: [2],
+    locationPricing: {
+      2: 349 // Delhi
+    },
+    customization: {
+      spiceLevel: ["Mild", "Medium", "Spicy"],
+      addOns: [
+        { name: "Extra Chicken", price: 70 },
+        { name: "Garlic Naan", price: 60 }
+      ]
+    }
+  },
+  // Bangalore Special
+  {
+    id: 11,
+    name: "Filter Coffee",
+    description: "South Indian style strong filter coffee with chicory",
+    price: 99,
+    category: "Beverages",
+    image: "https://images.unsplash.com/photo-1559925393-8be0ec4767c8",
+    dietary: ["Vegetarian"],
+    popular: true,
+    servingSize: "1 cup",
+    locationIds: [3],
+    locationPricing: {
+      3: 99 // Bangalore
+    }
+  },
+  // Hyderabad Special
+  {
+    id: 12,
+    name: "Hyderabadi Biryani",
+    description: "Fragrant basmati rice cooked with spices and chicken in the authentic Hyderabadi style",
+    price: 299,
+    category: "Lunch",
+    image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0",
+    dietary: ["High-Protein"],
+    popular: true,
+    servingSize: "Serves 1-2 people",
+    locationIds: [4],
+    locationPricing: {
+      4: 299 // Hyderabad
+    },
+    customization: {
+      spiceLevel: ["Mild", "Medium", "Spicy", "Extra Spicy"],
+      addOns: [
+        { name: "Raita", price: 30 },
+        { name: "Salan", price: 40 }
+      ],
+      size: [
+        { name: "Regular", priceMultiplier: 1 },
+        { name: "Large", priceMultiplier: 1.5 }
+      ]
     }
   }
 ];
@@ -235,7 +362,12 @@ const combos = [
     items: [1, 7],
     price: 599,
     image: "https://images.unsplash.com/photo-1588137378633-dea1336ce1e2",
-    servingSize: "Serves 1-2 people"
+    servingSize: "Serves 1-2 people",
+    locationIds: [1, 3],
+    locationPricing: {
+      1: 599, // Mumbai
+      3: 619  // Bangalore
+    }
   },
   {
     id: 102,
@@ -244,7 +376,38 @@ const combos = [
     items: [2, 4],
     price: 699,
     image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd",
-    servingSize: "Serves 2 people"
+    servingSize: "Serves 2 people",
+    locationIds: [2, 4],
+    locationPricing: {
+      2: 699, // Delhi
+      4: 679  // Hyderabad
+    }
+  },
+  {
+    id: 103,
+    name: "Mumbai Street Food Combo",
+    description: "Vada Pav + Masala Chai",
+    items: [9],
+    price: 129,
+    image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84",
+    servingSize: "Serves 1 person",
+    locationIds: [1],
+    locationPricing: {
+      1: 129 // Mumbai
+    }
+  },
+  {
+    id: 104,
+    name: "Delhi Delight Combo",
+    description: "Butter Chicken Bowl + Naan",
+    items: [10],
+    price: 399,
+    image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398",
+    servingSize: "Serves 1-2 people",
+    locationIds: [2],
+    locationPricing: {
+      2: 399 // Delhi
+    }
   }
 ];
 
@@ -279,11 +442,28 @@ const Order = () => {
     }
   }, [location]);
 
+  // Filter menu items based on location
   const menuItems = allMenuItems.filter(item => 
     !locationId || !item.locationIds || item.locationIds.includes(locationId)
   );
 
-  const categories = ["All", "Breakfast", "Lunch", "Dinner", "Snacks", "Combos"];
+  // Get location-specific price for an item
+  const getItemPrice = (item: MenuItem) => {
+    if (locationId && item.locationPricing && item.locationPricing[locationId]) {
+      return item.locationPricing[locationId];
+    }
+    return item.price;
+  };
+
+  // Get location-specific price for a combo
+  const getComboPrice = (combo: typeof combos[0]) => {
+    if (locationId && combo.locationPricing && combo.locationPricing[locationId]) {
+      return combo.locationPricing[locationId];
+    }
+    return combo.price;
+  };
+
+  const categories = ["All", "Breakfast", "Lunch", "Dinner", "Snacks", "Combos", "Beverages", "Street Food"];
   const dietaryOptions = ["Vegetarian", "Vegan", "Gluten-Free", "High-Protein", "Low-Carb", "Low-Fat"];
 
   const filteredItems = menuItems.filter((item) => {
@@ -317,11 +497,11 @@ const Order = () => {
   const handleAddToCart = () => {
     if (!selectedItem) return;
     
-    let basePrice = selectedItem.price;
+    let basePrice = getItemPrice(selectedItem);
     if (selectedItem.customization?.size && currentOptions.size) {
       const selectedSize = selectedItem.customization.size.find(s => s.name === currentOptions.size);
       if (selectedSize) {
-        basePrice = Math.round(selectedItem.price * selectedSize.priceMultiplier);
+        basePrice = Math.round(basePrice * selectedSize.priceMultiplier);
       }
     }
     
@@ -361,7 +541,7 @@ const Order = () => {
       ...item,
       quantity: 1,
       selectedOptions: {},
-      totalItemPrice: item.price
+      totalItemPrice: getItemPrice(item)
     };
     
     setCart(prev => [...prev, cartItem]);
@@ -481,56 +661,75 @@ const Order = () => {
                   Special Combos
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {combos.map((combo) => (
-                    <div
-                      key={combo.id}
-                      className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
-                      onClick={() => {
-                        const comboItems = combo.items.map(id => menuItems.find(item => item.id === id))
-                          .filter(Boolean) as MenuItem[];
-                        
-                        comboItems.forEach(item => {
-                          const cartItem: CartItem = {
-                            ...item,
-                            quantity: 1,
-                            selectedOptions: {},
-                            totalItemPrice: item.price
-                          };
-                          setCart(prev => [...prev, cartItem]);
-                        });
-                      }}
-                    >
-                      <div className="relative">
-                        <img
-                          src={combo.image}
-                          alt={combo.name}
-                          className="w-full h-48 object-cover"
-                        />
-                        <div className="absolute top-2 right-2 bg-accent text-white px-2 py-1 rounded-md text-sm font-bold">
-                          COMBO
+                  {combos
+                    .filter(combo => !locationId || combo.locationIds.includes(locationId))
+                    .map((combo) => (
+                      <div
+                        key={combo.id}
+                        className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
+                        onClick={() => {
+                          const comboItems = combo.items.map(id => menuItems.find(item => item.id === id))
+                            .filter(Boolean) as MenuItem[];
+                          
+                          comboItems.forEach(item => {
+                            const cartItem: CartItem = {
+                              ...item,
+                              quantity: 1,
+                              selectedOptions: {},
+                              totalItemPrice: getItemPrice(item)
+                            };
+                            setCart(prev => [...prev, cartItem]);
+                          });
+                        }}
+                      >
+                        <div className="relative">
+                          <img
+                            src={combo.image}
+                            alt={combo.name}
+                            className="w-full h-48 object-cover"
+                          />
+                          <div className="absolute top-2 right-2 bg-accent text-white px-2 py-1 rounded-md text-sm font-bold">
+                            COMBO
+                          </div>
+                        </div>
+                        <div className="p-4">
+                          <h3 className="font-playfair text-xl font-bold dark:text-white">
+                            {combo.name}
+                          </h3>
+                          <p className="text-gray-600 dark:text-gray-300 mb-2">
+                            {combo.description}
+                          </p>
+                          <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
+                            {combo.servingSize}
+                          </p>
+                          <div className="flex justify-between items-center">
+                            <span className="font-montserrat font-bold text-lg dark:text-white">
+                              ₹{getComboPrice(combo)}
+                            </span>
+                            <Button 
+                              className="bg-primary hover:bg-primary/90"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const comboItems = combo.items.map(id => menuItems.find(item => item.id === id))
+                                  .filter(Boolean) as MenuItem[];
+                                
+                                comboItems.forEach(item => {
+                                  const cartItem: CartItem = {
+                                    ...item,
+                                    quantity: 1,
+                                    selectedOptions: {},
+                                    totalItemPrice: getItemPrice(item)
+                                  };
+                                  setCart(prev => [...prev, cartItem]);
+                                });
+                              }}
+                            >
+                              Add to Cart
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                      <div className="p-4">
-                        <h3 className="font-playfair text-xl font-bold dark:text-white">
-                          {combo.name}
-                        </h3>
-                        <p className="text-gray-600 dark:text-gray-300 mb-2">
-                          {combo.description}
-                        </p>
-                        <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
-                          {combo.servingSize}
-                        </p>
-                        <div className="flex justify-between items-center">
-                          <span className="font-montserrat font-bold text-lg dark:text-white">
-                            ₹{combo.price}
-                          </span>
-                          <Button className="bg-primary hover:bg-primary/90">
-                            Add to Cart
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </div>
             ) : null}
@@ -576,7 +775,7 @@ const Order = () => {
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="font-montserrat font-bold text-lg dark:text-white">
-                        ₹{item.price}
+                        ₹{getItemPrice(item)}
                       </span>
                       <Button 
                         className="bg-primary hover:bg-primary/90"
@@ -628,7 +827,7 @@ const Order = () => {
                         </p>
                         <div className="flex justify-between items-center">
                           <span className="font-montserrat font-bold text-lg dark:text-white">
-                            ₹{item.price}
+                            ₹{getItemPrice(item)}
                           </span>
                           <Button 
                             className="bg-primary hover:bg-primary/90"
@@ -687,7 +886,7 @@ const Order = () => {
                       </p>
                       <div className="flex justify-between items-center">
                         <span className="font-montserrat font-bold text-lg dark:text-white">
-                          ₹{item.price}
+                          ₹{getItemPrice(item)}
                         </span>
                         <Button 
                           className="bg-primary hover:bg-primary/90"
@@ -870,4 +1069,3 @@ const Order = () => {
 };
 
 export default Order;
-

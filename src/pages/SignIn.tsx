@@ -1,17 +1,53 @@
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaGoogle, FaApple } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+
+const dietaryPreferences = [
+  { id: "vegetarian", label: "Vegetarian" },
+  { id: "vegan", label: "Vegan" },
+  { id: "gluten-free", label: "Gluten-Free" },
+  { id: "high-protein", label: "High-Protein" },
+  { id: "low-carb", label: "Low-Carb" },
+  { id: "low-fat", label: "Low-Fat" },
+];
+
+const cuisinePreferences = [
+  "All",
+  "Indian",
+  "Continental",
+  "Asian",
+  "Mediterranean",
+  "Italian",
+  "Mexican",
+];
 
 const SignIn = () => {
   const [isSignUp, setIsSignUp] = useState(false);
+  const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
+  const [cuisine, setCuisine] = useState<string>("All");
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
+    // In a real app, store preferences in local storage or user profile
+    localStorage.setItem("dietaryPreferences", JSON.stringify(selectedDietary));
+    localStorage.setItem("cuisinePreference", cuisine);
     navigate("/");
+  };
+
+  const toggleDietaryPreference = (id: string) => {
+    setSelectedDietary(current => 
+      current.includes(id) 
+        ? current.filter(item => item !== id)
+        : [...current, id]
+    );
   };
 
   return (
@@ -46,6 +82,51 @@ const SignIn = () => {
               placeholder="Password"
               className="w-full dark:bg-gray-700 dark:text-white"
             />
+
+            {isSignUp && (
+              <div className="space-y-4 pt-2">
+                <div>
+                  <h3 className="text-lg font-medium dark:text-white mb-2">Dietary Preferences</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                    Select all that apply. We'll customize your menu based on these preferences.
+                  </p>
+                  <div className="grid grid-cols-2 gap-3">
+                    {dietaryPreferences.map((preference) => (
+                      <div key={preference.id} className="flex items-center space-x-2">
+                        <Checkbox 
+                          id={preference.id} 
+                          checked={selectedDietary.includes(preference.id)}
+                          onCheckedChange={() => toggleDietaryPreference(preference.id)}
+                        />
+                        <Label 
+                          htmlFor={preference.id}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:text-white"
+                        >
+                          {preference.label}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-medium dark:text-white mb-2">Preferred Cuisine</h3>
+                  <Select value={cuisine} onValueChange={setCuisine}>
+                    <SelectTrigger className="w-full dark:bg-gray-700 dark:text-white">
+                      <SelectValue placeholder="Select cuisine" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {cuisinePreferences.map((cuisineOption) => (
+                        <SelectItem key={cuisineOption} value={cuisineOption}>
+                          {cuisineOption}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            )}
+
             <Button className="w-full bg-primary hover:bg-primary/90">
               {isSignUp ? "Sign Up" : "Sign In"}
             </Button>
