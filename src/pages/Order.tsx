@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Star, ArrowLeft, X, Plus, Minus, Package, Heart, Clock } from "lucide-react";
+import { Search, Star, ArrowLeft, X, Plus, Minus, Package, Heart, Clock, ArrowRight } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import KioskLocationsBar from "@/components/KioskLocationsBar";
