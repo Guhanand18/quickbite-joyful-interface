@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -363,6 +362,20 @@ const Order = () => {
     setIsCustomizing(false);
   };
 
+  // Add a new function to directly add items to cart without customization
+  const handleQuickAddToCart = (e: React.MouseEvent, item: MenuItem) => {
+    e.stopPropagation(); // Prevent the card click event from firing
+    
+    const cartItem: CartItem = {
+      ...item,
+      quantity: 1,
+      selectedOptions: {},
+      totalItemPrice: item.price
+    };
+    
+    setCart(prev => [...prev, cartItem]);
+  };
+
   const handleCheckout = () => {
     // Pass cart information to checkout page
     navigate('/checkout', { state: { cart } });
@@ -576,7 +589,10 @@ const Order = () => {
                       <span className="font-montserrat font-bold text-lg dark:text-white">
                         ₹{item.price}
                       </span>
-                      <Button className="bg-primary hover:bg-primary/90">
+                      <Button 
+                        className="bg-primary hover:bg-primary/90"
+                        onClick={(e) => handleQuickAddToCart(e, item)}
+                      >
                         Add to Cart
                       </Button>
                     </div>
@@ -625,7 +641,10 @@ const Order = () => {
                           <span className="font-montserrat font-bold text-lg dark:text-white">
                             ₹{item.price}
                           </span>
-                          <Button className="bg-primary hover:bg-primary/90">
+                          <Button 
+                            className="bg-primary hover:bg-primary/90"
+                            onClick={(e) => handleQuickAddToCart(e, item)}
+                          >
                             Add to Cart
                           </Button>
                         </div>
@@ -681,7 +700,10 @@ const Order = () => {
                         <span className="font-montserrat font-bold text-lg dark:text-white">
                           ₹{item.price}
                         </span>
-                        <Button className="bg-primary hover:bg-primary/90">
+                        <Button 
+                          className="bg-primary hover:bg-primary/90"
+                          onClick={(e) => handleQuickAddToCart(e, item)}
+                        >
                           Add to Cart
                         </Button>
                       </div>
@@ -813,87 +835,4 @@ const Order = () => {
 
                 {selectedItem.customization.specialInstructions && (
                   <div>
-                    <h3 className="text-lg font-semibold mb-3 dark:text-white">Special Instructions</h3>
-                    <Input
-                      placeholder="Any special requests?"
-                      className="w-full"
-                      value={currentOptions.specialInstructions || ""}
-                      onChange={e => setCurrentOptions(prev => ({...prev, specialInstructions: e.target.value}))}
-                    />
-                  </div>
-                )}
-
-                <div className="absolute bottom-0 left-0 right-0 p-6 bg-background border-t">
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="font-semibold dark:text-white">Total</span>
-                    <span className="font-bold text-xl dark:text-white">
-                      ₹{(() => {
-                        // Calculate price based on selected options
-                        let basePrice = selectedItem.price;
-                        
-                        // Adjust for size
-                        if (selectedItem.customization.size && currentOptions.size) {
-                          const selectedSize = selectedItem.customization.size.find(s => s.name === currentOptions.size);
-                          if (selectedSize) {
-                            basePrice = Math.round(basePrice * selectedSize.priceMultiplier);
-                          }
-                        }
-                        
-                        // Add price of addons
-                        let addOnsPrice = 0;
-                        if (currentOptions.addOns && selectedItem.customization.addOns) {
-                          addOnsPrice = currentOptions.addOns.reduce((total, addon) => {
-                            const addOnItem = selectedItem.customization?.addOns?.find(a => a.name === addon);
-                            return total + (addOnItem?.price || 0);
-                          }, 0);
-                        }
-                        
-                        // Add price of extras
-                        let extrasPrice = 0;
-                        if (currentOptions.extras && selectedItem.customization.extras) {
-                          extrasPrice = currentOptions.extras.reduce((total, extra) => {
-                            const extraItem = selectedItem.customization?.extras?.find(e => e.name === extra);
-                            return total + (extraItem?.price || 0);
-                          }, 0);
-                        }
-                        
-                        // Multiply by quantity
-                        return (basePrice + addOnsPrice + extrasPrice) * quantity;
-                      })()}
-                    </span>
-                  </div>
-                  <Button
-                    className="w-full"
-                    onClick={handleAddToCart}
-                  >
-                    Add to Cart
-                  </Button>
-                </div>
-              </div>
-            )}
-          </SheetContent>
-        </Sheet>
-
-        {/* Cart floating button */}
-        {cart.length > 0 && (
-          <div className="fixed bottom-8 right-8 z-40">
-            <div 
-              className="relative bg-primary text-white p-4 rounded-full shadow-lg cursor-pointer hover:bg-primary/90 transition-colors"
-              onClick={() => navigate('/checkout', { state: { cart } })}
-            >
-              <div className="absolute -top-2 -right-2 bg-accent text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">
-                {cart.length}
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold">₹{getTotalPrice()}</span>
-                <ArrowRight className="h-5 w-5" />
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-export default Order;
+                    <h3 className="text-lg font-
