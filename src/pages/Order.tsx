@@ -9,6 +9,7 @@ import KioskLocationsBar from "@/components/KioskLocationsBar";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/components/ui/use-toast";
 
 interface MenuItem {
   id: number;
@@ -346,6 +347,93 @@ const allMenuItems: MenuItem[] = [
         { name: "Large", priceMultiplier: 1.5 }
       ]
     }
+  },
+  // Adding more snacks
+  {
+    id: 13,
+    name: "Samosa",
+    description: "Crispy pastry filled with spiced potatoes and peas, served with mint chutney",
+    price: 79,
+    category: "Snacks",
+    image: "https://images.unsplash.com/photo-1601050690597-df0568f70950",
+    dietary: ["Vegetarian"],
+    popular: true,
+    servingSize: "2 pieces",
+    locationIds: [1, 2, 3, 4],
+    customization: {
+      extras: [
+        { name: "Extra Chutney", price: 15 },
+      ]
+    }
+  },
+  {
+    id: 14,
+    name: "Chilli Cheese Toast",
+    description: "Grilled bread topped with spicy cheese mix and bell peppers",
+    price: 149,
+    category: "Snacks",
+    image: "https://images.unsplash.com/photo-1528736235302-52922df5c122",
+    dietary: ["Vegetarian"],
+    popular: false,
+    servingSize: "4 pieces",
+    locationIds: [1, 2],
+    customization: {
+      spiceLevel: ["Mild", "Medium", "Spicy"],
+    }
+  },
+  {
+    id: 15,
+    name: "Masala Peanuts",
+    description: "Crunchy peanuts coated with tangy spice mix",
+    price: 99,
+    category: "Snacks",
+    image: "https://images.unsplash.com/photo-1536638317505-155d76a8eed8",
+    dietary: ["Vegan", "Gluten-Free"],
+    popular: false,
+    servingSize: "100g",
+    locationIds: [2, 3, 4],
+    customization: {
+      spiceLevel: ["Medium", "Spicy", "Extra Spicy"],
+      size: [
+        { name: "Regular", priceMultiplier: 1 },
+        { name: "Large", priceMultiplier: 1.8 }
+      ]
+    }
+  },
+  {
+    id: 16,
+    name: "Potato Chips with Dip",
+    description: "Freshly made crispy potato chips served with herb yogurt dip",
+    price: 129,
+    category: "Snacks",
+    image: "https://images.unsplash.com/photo-1566478989037-eec170784d0b",
+    dietary: ["Vegetarian"],
+    popular: true,
+    servingSize: "Serves 1-2 people",
+    locationIds: [1, 2, 3, 4],
+    customization: {
+      addOns: [
+        { name: "Extra Dip", price: 30 },
+        { name: "Cheese Sauce", price: 45 }
+      ]
+    }
+  },
+  {
+    id: 17,
+    name: "Vegetable Spring Rolls",
+    description: "Crispy rolls filled with fresh vegetables and served with sweet chili sauce",
+    price: 179,
+    category: "Snacks",
+    image: "https://images.unsplash.com/photo-1626200419199-391ae4be7a89",
+    dietary: ["Vegan"],
+    popular: false,
+    servingSize: "4 pieces",
+    locationIds: [1, 3],
+    customization: {
+      addOns: [
+        { name: "Extra Sauce", price: 20 },
+      ]
+    }
   }
 ];
 
@@ -433,6 +521,8 @@ const Order = () => {
   });
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("all");
+  const [favorites, setFavorites] = useState<number[]>([]);
+  const { toast } = useToast();
   
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -440,7 +530,18 @@ const Order = () => {
     if (locationParam) {
       setLocationId(parseInt(locationParam, 10));
     }
+    
+    // Load favorites from localStorage
+    const savedFavorites = localStorage.getItem('foodFavorites');
+    if (savedFavorites) {
+      setFavorites(JSON.parse(savedFavorites));
+    }
   }, [location]);
+
+  // Save favorites to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('foodFavorites', JSON.stringify(favorites));
+  }, [favorites]);
 
   // Filter menu items based on location
   const menuItems = allMenuItems.filter(item => 
@@ -461,6 +562,36 @@ const Order = () => {
       return combo.locationPricing[locationId];
     }
     return combo.price;
+  };
+
+  // Get location name based on ID
+  const getLocationName = () => {
+    switch (locationId) {
+      case 1: return "Mumbai Kiosk";
+      case 2: return "Delhi Kiosk";
+      case 3: return "Bangalore Kiosk";
+      case 4: return "Hyderabad Kiosk";
+      default: return "Selected Kiosk";
+    }
+  };
+
+  // Toggle favorite status for an item
+  const toggleFavorite = (e: React.MouseEvent, itemId: number) => {
+    e.stopPropagation();
+    
+    if (favorites.includes(itemId)) {
+      setFavorites(favorites.filter(id => id !== itemId));
+      toast({
+        title: "Removed from favorites",
+        description: "This item has been removed from your favorites",
+      });
+    } else {
+      setFavorites([...favorites, itemId]);
+      toast({
+        title: "Added to favorites",
+        description: "This item has been added to your favorites",
+      });
+    }
   };
 
   const categories = ["All", "Breakfast", "Lunch", "Dinner", "Snacks", "Combos", "Beverages", "Street Food"];
@@ -532,6 +663,11 @@ const Order = () => {
     
     setCart(prev => [...prev, cartItem]);
     setIsCustomizing(false);
+    
+    toast({
+      title: "Added to cart",
+      description: `${quantity} x ${selectedItem.name} added to your cart`,
+    });
   };
 
   const handleQuickAddToCart = (e: React.MouseEvent, item: MenuItem) => {
@@ -545,10 +681,20 @@ const Order = () => {
     };
     
     setCart(prev => [...prev, cartItem]);
+    
+    toast({
+      title: "Added to cart",
+      description: `${item.name} added to your cart`,
+    });
   };
 
   const handleCheckout = () => {
-    navigate('/checkout', { state: { cart } });
+    navigate('/order-summary', { 
+      state: { 
+        cart,
+        locationName: getLocationName()
+      } 
+    });
   };
 
   const getTotalPrice = () => {
@@ -666,7 +812,7 @@ const Order = () => {
                     .map((combo) => (
                       <div
                         key={combo.id}
-                        className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
+                        className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer animate-fade-in"
                         onClick={() => {
                           const comboItems = combo.items.map(id => menuItems.find(item => item.id === id))
                             .filter(Boolean) as MenuItem[];
@@ -679,6 +825,11 @@ const Order = () => {
                               totalItemPrice: getItemPrice(item)
                             };
                             setCart(prev => [...prev, cartItem]);
+                          });
+                          
+                          toast({
+                            title: "Added to cart",
+                            description: `${combo.name} added to your cart`,
                           });
                         }}
                       >
@@ -722,6 +873,11 @@ const Order = () => {
                                   };
                                   setCart(prev => [...prev, cartItem]);
                                 });
+                                
+                                toast({
+                                  title: "Added to cart",
+                                  description: `${combo.name} added to your cart`,
+                                });
                               }}
                             >
                               Add to Cart
@@ -738,20 +894,30 @@ const Order = () => {
               {filteredItems.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer animate-fade-in"
                   onClick={() => handleItemClick(item)}
                 >
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-full h-48 object-cover"
-                  />
+                  <div className="relative">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-full h-48 object-cover"
+                    />
+                    <button 
+                      className="absolute top-2 right-2 p-1 rounded-full bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 transition-colors"
+                      onClick={(e) => toggleFavorite(e, item.id)}
+                    >
+                      <Star 
+                        className={`h-5 w-5 ${favorites.includes(item.id) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'} transition-colors hover-scale`} 
+                      />
+                    </button>
+                  </div>
                   <div className="p-4">
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="font-playfair text-xl font-bold dark:text-white">
                         {item.name}
                       </h3>
-                      {item.popular && (
+                      {item.popular && !favorites.includes(item.id) && (
                         <div className="flex items-center text-yellow-400">
                           <Star className="h-5 w-5 fill-current" />
                         </div>
@@ -767,7 +933,7 @@ const Order = () => {
                       {item.dietary.map((diet) => (
                         <span
                           key={diet}
-                          className="px-2 py-1 bg-neutral dark:bg-gray-700 rounded-full text-sm dark:text-white"
+                          className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm dark:text-white"
                         >
                           {diet}
                         </span>
@@ -802,7 +968,7 @@ const Order = () => {
                   {recentItems.map((item) => (
                     <div
                       key={item.id}
-                      className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
+                      className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer animate-fade-in"
                       onClick={() => handleItemClick(item)}
                     >
                       <div className="relative">
@@ -814,6 +980,14 @@ const Order = () => {
                         <div className="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded-md text-sm">
                           Recent
                         </div>
+                        <button 
+                          className="absolute top-2 left-2 p-1 rounded-full bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 transition-colors"
+                          onClick={(e) => toggleFavorite(e, item.id)}
+                        >
+                          <Star 
+                            className={`h-5 w-5 ${favorites.includes(item.id) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'} transition-colors hover-scale`} 
+                          />
+                        </button>
                       </div>
                       <div className="p-4">
                         <h3 className="font-playfair text-xl font-bold dark:text-white">
@@ -861,7 +1035,7 @@ const Order = () => {
                 {recommendedItems.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
+                    className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer animate-fade-in"
                     onClick={() => handleItemClick(item)}
                   >
                     <div className="relative">
@@ -873,6 +1047,14 @@ const Order = () => {
                       <div className="absolute top-2 right-2 bg-pink-500 text-white px-2 py-1 rounded-md text-sm">
                         Recommended
                       </div>
+                      <button 
+                        className="absolute top-2 left-2 p-1 rounded-full bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 transition-colors"
+                        onClick={(e) => toggleFavorite(e, item.id)}
+                      >
+                        <Star 
+                          className={`h-5 w-5 ${favorites.includes(item.id) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'} transition-colors hover-scale`} 
+                        />
+                      </button>
                     </div>
                     <div className="p-4">
                       <h3 className="font-playfair text-xl font-bold dark:text-white">
@@ -1047,7 +1229,7 @@ const Order = () => {
         </Sheet>
 
         {cart.length > 0 && (
-          <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t shadow-lg p-4 z-10">
+          <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t shadow-lg p-4 z-10 animate-slide-in-right">
             <div className="container mx-auto flex justify-between items-center">
               <div>
                 <span className="text-gray-600 dark:text-gray-300">{cart.reduce((total, item) => total + item.quantity, 0)} items</span>

@@ -1,12 +1,13 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
-import { QrCode, CreditCard } from 'lucide-react';
+import { QrCode, CreditCard, CreditCard as Bank, Wallet } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import OrderQRCode from '@/components/OrderQRCode';
 
 declare global {
   interface Window {
@@ -22,14 +23,29 @@ const UPI_METHODS = [
   { id: "amazonpay", name: "Amazon Pay", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Amazon_Pay_logo.svg/1024px-Amazon_Pay_logo.svg.png" },
 ];
 
+const NETBANKING_BANKS = [
+  { id: "hdfc", name: "HDFC Bank" },
+  { id: "sbi", name: "State Bank of India" },
+  { id: "icici", name: "ICICI Bank" },
+  { id: "axis", name: "Axis Bank" },
+  { id: "kotak", name: "Kotak Mahindra Bank" },
+];
+
 const Checkout = () => {
   const navigate = useNavigate();
-  const [showQR, setShowQR] = React.useState(false);
-  const [paymentMethod, setPaymentMethod] = React.useState<string>("card");
-  const [upiMethod, setUpiMethod] = React.useState<string>("gpay");
+  const location = useLocation();
+  const [showQR, setShowQR] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<string>("card");
+  const [upiMethod, setUpiMethod] = useState<string>("gpay");
+  const [netBankingOption, setNetBankingOption] = useState<string>("hdfc");
+  const [orderId, setOrderId] = useState<string>("");
   const { toast } = useToast();
 
   const handlePayment = () => {
+    // Generate a random order ID
+    const newOrderId = `ORD-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}`;
+    setOrderId(newOrderId);
+
     if (paymentMethod === "upi") {
       // Simulate UPI payment
       setTimeout(() => {
@@ -37,6 +53,18 @@ const Checkout = () => {
         toast({
           title: "Payment Successful",
           description: `Your payment with ${UPI_METHODS.find(m => m.id === upiMethod)?.name} was successful!`,
+        });
+      }, 1000);
+      return;
+    }
+
+    if (paymentMethod === "netbanking") {
+      // Simulate Netbanking payment
+      setTimeout(() => {
+        setShowQR(true);
+        toast({
+          title: "Payment Successful",
+          description: `Your payment with ${NETBANKING_BANKS.find(b => b.id === netBankingOption)?.name} was successful!`,
         });
       }, 1000);
       return;
@@ -97,7 +125,10 @@ const Checkout = () => {
                   <div>
                     <div className="flex items-center space-x-2 rounded-lg border p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
                       <RadioGroupItem value="upi" id="upi" />
-                      <Label htmlFor="upi" className="cursor-pointer">UPI Payment</Label>
+                      <Label htmlFor="upi" className="cursor-pointer flex items-center">
+                        <Wallet className="mr-2 h-5 w-5" />
+                        UPI Payment
+                      </Label>
                     </div>
                     
                     {paymentMethod === "upi" && (
@@ -117,6 +148,32 @@ const Checkout = () => {
                       </div>
                     )}
                   </div>
+
+                  <div>
+                    <div className="flex items-center space-x-2 rounded-lg border p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                      <RadioGroupItem value="netbanking" id="netbanking" />
+                      <Label htmlFor="netbanking" className="cursor-pointer flex items-center">
+                        <Bank className="mr-2 h-5 w-5" />
+                        Net Banking
+                      </Label>
+                    </div>
+                    
+                    {paymentMethod === "netbanking" && (
+                      <div className="mt-3 ml-6 border rounded-lg p-4 bg-gray-50 dark:bg-gray-700/50">
+                        <p className="text-sm mb-3 text-gray-600 dark:text-gray-300">Select your bank:</p>
+                        <RadioGroup value={netBankingOption} onValueChange={setNetBankingOption} className="space-y-2">
+                          {NETBANKING_BANKS.map((bank) => (
+                            <div key={bank.id} className="flex items-center space-x-2 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                              <RadioGroupItem value={bank.id} id={bank.id} />
+                              <Label htmlFor={bank.id} className="cursor-pointer">
+                                {bank.name}
+                              </Label>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                      </div>
+                    )}
+                  </div>
                 </RadioGroup>
                 
                 <Button 
@@ -128,15 +185,12 @@ const Checkout = () => {
               </div>
             </div>
           ) : (
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center">
-              <QrCode className="w-48 h-48 mx-auto mb-4 text-primary" />
-              <h2 className="text-xl font-semibold mb-4 dark:text-white">Order QR Code</h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
-                Scan this QR code at the kiosk to collect your order
-              </p>
-              <Button variant="outline" onClick={() => navigate("/")}>
-                Back to Home
-              </Button>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center animate-scale-in">
+              <OrderQRCode 
+                open={true} 
+                onClose={() => navigate("/")} 
+                orderId={orderId} 
+              />
             </div>
           )}
         </div>
