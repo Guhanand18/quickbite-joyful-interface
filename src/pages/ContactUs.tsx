@@ -1,13 +1,15 @@
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Mail, MessageSquare } from "lucide-react";
+import { Mail, MessageSquare, ChevronLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 const ContactUs = () => {
+  const navigate = useNavigate();
+  
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     toast.success("Message sent successfully! We'll get back to you soon.");
@@ -17,6 +19,15 @@ const ContactUs = () => {
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <Navbar />
       <div className="container mx-auto px-4 py-12">
+        <Button
+          variant="ghost"
+          className="mb-6"
+          onClick={() => navigate(-1)}
+        >
+          <ChevronLeft className="h-4 w-4 mr-2" />
+          Back
+        </Button>
+
         <div className="max-w-3xl mx-auto">
           <h1 className="text-4xl font-bold text-center mb-8 text-gray-900 dark:text-white">
             Contact Us

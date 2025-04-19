@@ -1,9 +1,7 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useNavigate, useLocation } from 'react-router-dom';
-import Navbar from '@/components/Navbar';
-import { QrCode, CreditCard, CreditCard as Bank, Wallet } from 'lucide-react';
+import { QrCode, CreditCard, CreditCard as Bank, Wallet, ChevronLeft } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -105,6 +103,15 @@ const Checkout = () => {
     <div className="min-h-screen bg-neutral dark:bg-gray-900">
       <Navbar />
       <div className="container mx-auto px-4 py-8">
+        <Button
+          variant="ghost"
+          className="mb-6"
+          onClick={() => navigate(-1)}
+        >
+          <ChevronLeft className="h-4 w-4 mr-2" />
+          Back
+        </Button>
+
         <div className="max-w-2xl mx-auto">
           <h1 className="font-playfair text-3xl font-bold mb-8 dark:text-white">Checkout</h1>
           
@@ -187,7 +194,6 @@ const Checkout = () => {
           ) : (
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center animate-scale-in">
               <OrderQRCode 
-                open={true} 
                 onClose={() => navigate("/")} 
                 orderId={orderId} 
               />

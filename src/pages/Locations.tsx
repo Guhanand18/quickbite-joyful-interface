@@ -1,8 +1,8 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import { MapPin } from 'lucide-react';
+import { MapPin, ChevronLeft } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 import Navbar from '@/components/Navbar';
 
 const locations = [
@@ -57,6 +57,15 @@ const Locations = () => {
     <div className="min-h-screen bg-neutral dark:bg-gray-900">
       <Navbar />
       <div className="container mx-auto px-4 py-8">
+        <Button
+          variant="ghost"
+          className="mb-6"
+          onClick={() => navigate(-1)}
+        >
+          <ChevronLeft className="h-4 w-4 mr-2" />
+          Back
+        </Button>
+
         <h1 className="font-playfair text-4xl font-bold text-center mb-8 dark:text-white">
           Find a QuickBite Kiosk
         </h1>

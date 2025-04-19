@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { FaGoogle, FaApple } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -174,6 +175,15 @@ const SignIn = () => {
   return (
     <div className="min-h-screen bg-neutral dark:bg-gray-900 py-20">
       <div className="container mx-auto px-4">
+        <Button
+          variant="ghost"
+          className="mb-6"
+          onClick={() => navigate(-1)}
+        >
+          <ChevronLeft className="h-4 w-4 mr-2" />
+          Back
+        </Button>
+        
         <div className="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
           <h2 className="font-playfair text-3xl font-bold text-center mb-8 dark:text-white">
             {isSignUp ? "Create Account" : "Welcome Back"}
