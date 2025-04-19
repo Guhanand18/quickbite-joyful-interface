@@ -42,6 +42,10 @@ const Navbar = () => {
     navigate("/");
   };
 
+  const handleContactClick = () => {
+    navigate("/contact");
+  };
+
   return (
     <nav className="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-sm backdrop-blur-sm bg-white/80 dark:bg-gray-900/80">
       <div className="container mx-auto px-4">
@@ -56,7 +60,11 @@ const Navbar = () => {
               <Button variant="ghost" className="text-gray-700 dark:text-gray-200 hover:bg-primary/10 hover:text-primary dark:hover:bg-gray-800" onClick={() => navigate("/")}>
                 Home
               </Button>
-              <Button variant="ghost" className="text-gray-700 dark:text-gray-200 hover:bg-primary/10 hover:text-primary dark:hover:bg-gray-800">
+              <Button 
+                variant="ghost" 
+                className="text-gray-700 dark:text-gray-200 hover:bg-primary/10 hover:text-primary dark:hover:bg-gray-800" 
+                onClick={handleContactClick}
+              >
                 Contact
               </Button>
               {isSignedIn ? (
@@ -105,3 +113,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
