@@ -1,69 +1,34 @@
-# Welcome to your Lovable project
+# 🍱 QuickBite – Smart Meal Kiosk Platform
 
-## Project info
+QuickBite is a web-based application designed to support an IoT-powered smart meal kiosk system. It allows urban users to order nutritious, pre-packed meals from nearby partner restaurants and pick them up instantly using a mobile app or QR code interface.
 
-**URL**: https://lovable.dev/projects/563cb885-eab9-47c4-9349-092910dce2cf
+---
 
-## How can I edit this code?
+## 🚀 Features
 
-There are several ways of editing your application.
+- 🔍 Browse available meals from kiosks near you
+- 🛒 App-based ordering with real-time inventory updates
+- 📦 EcoPack-based packaging for zero-waste and sustainability
+- 📱 QR code-enabled pickup and user authentication
+- 🧾 Digital receipt and meal history log
+- 🌱 Supports the QuickBite ecosystem with loyalty rewards and sustainability metrics
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/563cb885-eab9-47c4-9349-092910dce2cf) and start prompting.
+## 💻 Tech Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Frontend:** HTML, CSS, JavaScript
+- **Backend:** Firebase (Authentication, Firestore, Hosting)
+- **Design:** Figma, Canva (for EcoPack visuals and kiosk UI concepts)
+- **Version Control:** Git & GitHub
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🌐 Live Preview
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+> [🔗 Demo Website Link (optional)](https://your-live-site-link.com)  
+(*Replace with your actual deployed link if available*)
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/563cb885-eab9-47c4-9349-092910dce2cf) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+## 📂 Folder Structure
