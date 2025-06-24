@@ -26,9 +26,6 @@ QuickBite is a web-based application designed to support an IoT-powered smart me
 
 ## 🌐 Live Preview
 
-> [🔗 Demo Website Link (optional)](https://your-live-site-link.com)  
-(*Replace with your actual deployed link if available*)
+> [🔗 Demo Website Link ](https://quickbite-joyful-interface.vercel.app/)  
 
 ---
-
-## 📂 Folder Structure
